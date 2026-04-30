@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <cstdint>
+#include <windows.h>
 
 #define RESET "\033[0m"
 #define RED "\033[31m"
@@ -18,4 +19,6 @@ bool hexToRGB(std::string& hex, uint8_t& r, uint8_t& g, uint8_t& b);
 void printColor(std::string& text, std::string& hex);
 
 void printLogo();
+
+std::string getTimeMinute();
                                                                            

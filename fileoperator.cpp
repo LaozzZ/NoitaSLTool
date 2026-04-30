@@ -1,7 +1,4 @@
-#pragma once
-
-#include "font.h"
-#include "fileoperation.h"
+#include "fileoperator.h"
 
 FileOperator::FileOperator(std::string s, std::string b, bool op)
     : m_source(s), m_backup(b), m_isOp(op) {}
@@ -52,7 +49,7 @@ void FileOperator::removeAll(std::string tPath)
         std::cout << BLUE << "已执行删除 \"tPath\"" << RESET << '\n';
 }
 
-void FileOperator::Save(std::string Backup)
+bool FileOperator::Save(std::string Backup)
 {   
     if(!fs::exists(Backup))
         fs::create_directory(Backup);
@@ -64,17 +61,18 @@ void FileOperator::Save(std::string Backup)
         if(key == 'y' || key == 'Y')
             removeAll(Backup);
         else if(key == 'n' || key == 'N')
-            return;
+            return 0;
         else
         {
             std::cout << "无效输入" << '\n';
-            return;
+            return 0;
         }
     }
     fs::copy(m_source,Backup,
     fs::copy_options::recursive | 
     fs::copy_options::overwrite_existing);
-    std::cout << BLUE << "保存成功 地址" << Backup << RESET << '\n'; 
+    std::cout << BLUE << "保存成功" << Backup << RESET;
+    return 1;
 }
 
 std::string FileOperator::getSourcePath()
@@ -87,6 +85,11 @@ void FileOperator::setSourcePath(std::string Tpath)
     WriteIni("CONFIG_PATH", "Config", "SourcePath", Tpath);
     m_source = Tpath;
     std::cout << BLUE << "源路径设置/更改成功" << RESET << '\n';
+}
+
+std::string FileOperator::getBackupPath()
+{
+    return m_backup;
 }
 
 void FileOperator::loadConfig()

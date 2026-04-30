@@ -1,7 +1,8 @@
 #pragma once
 
-#include "font.h"
+#include "utils.h"
 #include <iostream>
+#include <string>
 #include <filesystem>
 #include <windows.h>
 
@@ -23,17 +24,20 @@ class FileOperator
 
         void removeAll(std::string tPath);
 
-        void Save(std::string Backup);
+        bool Save(std::string Backup);
 
         std::string getSourcePath();
 
         void setSourcePath(std::string Tpath);
+
+        std::string getBackupPath();
 
         void loadConfig();
 
         bool getIsOp();
 
         void setIsOp(bool value);
+
     private:
         bool m_isOp = false;
         std::string m_source;
