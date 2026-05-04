@@ -1,7 +1,7 @@
 #include "fileoperator.h"
 
-FileOperator::FileOperator(std::string s, std::string b, bool op)
-    : m_source(s), m_backup(b), m_isOp(op) {}
+FileOperator::FileOperator(std::string source, std::string backup, bool op)
+    : m_source(source), m_backup(backup), m_isOp(op) {}
 
 
 bool FileOperator::WriteIni(const char* iniPath, const std::string& section, const std::string& key, const std::string& value)
@@ -28,7 +28,7 @@ std::string FileOperator::ReadIni(const char* iniPath, const std::string& sectio
     return buf;
 }
 
-bool FileOperator::isDirEmpty(const fs::path& dir)
+bool FileOperator::isDirEmpty(std::string dir)
 {
     if (!fs::is_directory(dir))
         return false;
@@ -53,7 +53,7 @@ bool FileOperator::Save(std::string Backup)
 {   
     if(!fs::exists(Backup))
         fs::create_directory(Backup);
-    else if(!isDirEmpty && !m_isOp)
+    else if(!isDirEmpty(Backup) && !m_isOp)
     {   
         char key;
         std::cout << YELLOW << "位置已被占用 是否覆盖? (y/n)";
