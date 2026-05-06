@@ -1,20 +1,19 @@
 #include "fileoperator.h"
 
-FileOperator::FileOperator(std::string source, std::string backup, bool op)
-    : m_source(source), m_backup(backup), m_isOp(op) {}
+FileOperator::FileOperator(){}
 
 
-bool FileOperator::WriteIni(const char* iniPath, const std::string& section, const std::string& key, const std::string& value)
+bool FileOperator::WriteIni(const std::string& iniPath, const std::string& section, const std::string& key, const std::string& value)
 {
     return WritePrivateProfileStringA(
         section.c_str(),
         key.c_str(),
         value.c_str(),
-        iniPath
+        iniPath.c_str()
     ) != 0;
 }
 
-std::string FileOperator::ReadIni(const char* iniPath, const std::string& section, const std::string& key) 
+std::string FileOperator::ReadIni(const std::string& iniPath, const std::string& section, const std::string& key) 
 {
     char buf[1024] = { 0 };
     GetPrivateProfileStringA(
@@ -23,7 +22,7 @@ std::string FileOperator::ReadIni(const char* iniPath, const std::string& sectio
         "",
         buf,
         1024,
-        iniPath
+        iniPath.c_str()
     );
     return buf;
 }
@@ -49,17 +48,17 @@ void FileOperator::removeAll(std::string tPath)
         std::cout << BLUE << "已执行删除 \"tPath\"" << RESET << '\n';
 }
 
-bool FileOperator::Save(std::string Backup)
+bool FileOperator::Save(std::string source, std::string backup, bool m_isOp)
 {   
-    if(!fs::exists(Backup))
-        fs::create_directory(Backup);
-    else if(!isDirEmpty(Backup) && !m_isOp)
+    if(!fs::exists(backup))
+        fs::create_directory(backup);
+    else if(!isDirEmpty(backup) && !m_isOp)
     {   
         char key;
         std::cout << YELLOW << "位置已被占用 是否覆盖? (y/n)";
         std::cin >> key;
         if(key == 'y' || key == 'Y')
-            removeAll(Backup);
+            removeAll(backup);
         else if(key == 'n' || key == 'N')
             return 0;
         else
@@ -68,43 +67,9 @@ bool FileOperator::Save(std::string Backup)
             return 0;
         }
     }
-    fs::copy(m_source,Backup,
+    fs::copy(source,backup,
     fs::copy_options::recursive | 
     fs::copy_options::overwrite_existing);
-    std::cout << BLUE << "保存成功" << Backup << RESET;
+    std::cout << BLUE << "保存成功" << backup << RESET;
     return 1;
 }
-
-std::string FileOperator::getSourcePath()
-{
-    return m_source;
-}
-
-void FileOperator::setSourcePath(std::string Tpath)
-{
-    WriteIni("CONFIG_PATH", "Config", "SourcePath", Tpath);
-    m_source = Tpath;
-    std::cout << BLUE << "源路径设置/更改成功" << RESET << '\n';
-}
-
-std::string FileOperator::getBackupPath()
-{
-    return m_backup;
-}
-
-void FileOperator::loadConfig()
-{
-    m_source = ReadIni("CONFIG_PATH", "Config", "SourcePath");
-    m_backup = ReadIni("CONFIG_PATH", "Config", "SavePath");
-}
-
-bool FileOperator::getIsOp()
-{
-    return m_isOp;
-}
-
-void FileOperator::setIsOp(bool value)
-{
-    m_isOp = value;
-}
-

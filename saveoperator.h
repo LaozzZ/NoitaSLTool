@@ -3,10 +3,13 @@
 #include "fileoperator.h"
 #include <vector>
 
+#define CONFIG_PATH "Config.ini"
+#define SAVEDATA_PATH "SaveData.ini"
+
 class SaveOperator : public FileOperator
 {   
     public:
-        SaveOperator(std::string s, std::string b, bool op);
+        SaveOperator();
 
         void Save(int dir, std::string saveName);
 
@@ -15,4 +18,12 @@ class SaveOperator : public FileOperator
         void Del(int dir);
 
         void SaveList();
+
+    private:
+        bool m_isOp = false;
+        std::string m_source;
+        std::string m_backup;
+        std::string PWD;
+        std::string configPath;
+        std::string savedataPath;
 };
