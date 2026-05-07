@@ -3,6 +3,7 @@
 #include "utils.h"
 #include <iostream>
 #include <string>
+#include <vector>
 #include <filesystem>
 #include <windows.h>
 
@@ -19,7 +20,9 @@ class FileOperator
 
         bool isDirEmpty(std::string dir);
 
-        void removeAll(std::string tPath);
+        void RemoveAll(std::string dir);
+
+        void ClearFolder(std::string dir);
 
         bool Save(std::string source, std::string backup, bool m_isOp);
 

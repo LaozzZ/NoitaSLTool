@@ -17,7 +17,15 @@ class SaveOperator : public FileOperator
 
         void Del(int dir);
 
-        void SaveList();
+        void DelAllSaves();
+
+        std::vector<std::string> GetSaveSections();
+
+        std::vector<std::vector<std::string>> GetSaveInfomations();
+
+        void PrintSaveInfomations();
+
+        void PathInit();
 
     private:
         bool m_isOp = false;
