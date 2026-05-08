@@ -2,6 +2,8 @@
 
 #include "fileoperator.h"
 #include <vector>
+#include <limits>
+#include <functional>
 
 #define CONFIG_PATH "Config.ini"
 #define SAVEDATA_PATH "SaveData.ini"
@@ -11,27 +13,38 @@ class SaveOperator : public FileOperator
     public:
         SaveOperator();
 
-        void Save(int dir, std::string saveName);
+        void Save();
 
-        void Load(int source);
+        void Load();
 
-        void Del(int dir);
+        void Del();
 
         void DelAllSaves();
 
+        bool CmpByNum(std::vector<std::string> a, std::vector<std::string> b);
+
+        bool CmpByTime(std::vector<std::string> a, std::vector<std::string> b);
+
         std::vector<std::string> GetSaveSections();
 
-        std::vector<std::vector<std::string>> GetSaveInfomations();
+        std::vector<std::vector<std::string>> GetSaveInformations();
 
-        void PrintSaveInfomations();
+        void PrintSaveInformations();
 
+        void PrintConfig();
+        
         void PathInit();
 
+        void CheckPaths();
+
+        void ChangeCmpFunc();
+
     private:
-        bool m_isOp = false;
-        std::string m_source;
-        std::string m_backup;
+        bool isOp = false;
+        std::string sourcePath;
+        std::string backupPath;
         std::string PWD;
         std::string configPath;
         std::string savedataPath;
+        std::function<bool(std::vector<std::string>, std::vector<std::string>)> cmpFunc;
 };
