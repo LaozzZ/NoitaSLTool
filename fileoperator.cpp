@@ -56,11 +56,11 @@ void FileOperator::ClearFolder(std::string dir)
     }
 }
 
-bool FileOperator::Save(std::string source, std::string backup, bool m_isOp)
+bool FileOperator::Save(std::string source, std::string backup)
 {   
     if(!fs::exists(backup))
         fs::create_directory(backup);
-    else if(!isDirEmpty(backup) && !m_isOp)
+    else if(!isDirEmpty(backup))
     {   
         char key;
         std::cout << YELLOW << "位置已被占用 是否覆盖? (y/n)";
@@ -78,6 +78,6 @@ bool FileOperator::Save(std::string source, std::string backup, bool m_isOp)
     fs::copy(source,backup,
     fs::copy_options::recursive | 
     fs::copy_options::overwrite_existing);
-    std::cout << BLUE << "保存成功" << backup << RESET;
+    std::cout << BLUE << "保存成功!地址:" << backup << '\n' << RESET;
     return 1;
 }

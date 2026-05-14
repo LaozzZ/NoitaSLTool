@@ -20,5 +20,5 @@ void printColor(std::string& text, std::string& hex);
 
 void printLogo();
 
-std::string getTimeMinute();
+std::string getTimeSecond();
                                                                            

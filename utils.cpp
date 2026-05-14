@@ -41,14 +41,14 @@ void printLogo()
     std::cout << "                                                                           \n";
 }
 
-std::string getTimeMinute()
+std::string getTimeSecond()
 {
     SYSTEMTIME st;
     GetLocalTime(&st);
     char buf[64];
-    sprintf(buf, "%04d-%02d-%02d %02d:%02d",
+    sprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d",
         st.wYear, st.wMonth, st.wDay,
-        st.wHour, st.wMinute
+        st.wHour, st.wMinute, st.wSecond
     );
     return std::string(buf);
 }

@@ -24,6 +24,6 @@ class FileOperator
 
         void ClearFolder(std::string dir);
 
-        bool Save(std::string source, std::string backup, bool m_isOp);
+        bool Save(std::string source, std::string backup);
 
 };

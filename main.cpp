@@ -23,14 +23,18 @@ int main()
 
     std::map<std::string,std::function<void()>> command_map;
     command_map["exit"] = cmd_exit;
+    command_map["quit"] = cmd_exit;
     command_map["save"] = std::bind(&SaveOperator::Save, &SOT);
+    command_map["qsave"] = std::bind(&SaveOperator::QuickSave, &SOT);
     command_map["load"] = std::bind(&SaveOperator::Load, &SOT);
+    command_map["qload"] = std::bind(&SaveOperator::QuickLoad, &SOT);
     command_map["del"] = std::bind(&SaveOperator::Del, &SOT);
     command_map["delallsaves"] = std::bind(&SaveOperator::DelAllSaves, &SOT);
-    command_map["printsaveinformations"] = std::bind(&SaveOperator::PrintSaveInformations, &SOT);
-    command_map["printconfig"] = std::bind(&SaveOperator::PrintConfig, &SOT);
-    command_map["pathinit"] = std::bind(&SaveOperator::PathInit, &SOT);
+    command_map["saveinfo"] = std::bind(&SaveOperator::PrintSaveInformations, &SOT);
+    command_map["config"] = std::bind(&SaveOperator::PrintConfig, &SOT);
     command_map["changecmpfunc"] = std::bind(&SaveOperator::ChangeCmpFunc, &SOT);
+    command_map["changesavepath"] = std::bind(&SaveOperator::ChangeSavePath, &SOT);
+    command_map["changesourcepath"] = std::bind(&SaveOperator::ChangeSourcePath, &SOT);
     SOT.CheckPaths();
     
     while(1)

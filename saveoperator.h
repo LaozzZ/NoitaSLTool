@@ -4,6 +4,7 @@
 #include <vector>
 #include <limits>
 #include <functional>
+#include <algorithm>
 
 #define CONFIG_PATH "Config.ini"
 #define SAVEDATA_PATH "SaveData.ini"
@@ -15,7 +16,11 @@ class SaveOperator : public FileOperator
 
         void Save();
 
+        void QuickSave();
+
         void Load();
+
+        void QuickLoad();
 
         void Del();
 
@@ -25,6 +30,8 @@ class SaveOperator : public FileOperator
 
         bool CmpByTime(std::vector<std::string> a, std::vector<std::string> b);
 
+        void ChangeCmpFunc();
+
         std::vector<std::string> GetSaveSections();
 
         std::vector<std::vector<std::string>> GetSaveInformations();
@@ -32,15 +39,16 @@ class SaveOperator : public FileOperator
         void PrintSaveInformations();
 
         void PrintConfig();
-        
-        void PathInit();
+
+        void InitPath();
 
         void CheckPaths();
 
-        void ChangeCmpFunc();
+        void ChangeSavePath();
+
+        void ChangeSourcePath();
 
     private:
-        bool isOp = false;
         std::string sourcePath;
         std::string backupPath;
         std::string PWD;
