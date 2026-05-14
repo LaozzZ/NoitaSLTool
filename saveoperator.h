@@ -5,6 +5,7 @@
 #include <limits>
 #include <functional>
 #include <algorithm>
+#include <windows.h>
 
 #define CONFIG_PATH "Config.ini"
 #define SAVEDATA_PATH "SaveData.ini"
@@ -17,6 +18,8 @@ class SaveOperator : public FileOperator
         void Save();
 
         void QuickSave();
+
+        void AutoSave(bool& isMonitor);
 
         void Load();
 
@@ -48,11 +51,15 @@ class SaveOperator : public FileOperator
 
         void ChangeSourcePath();
 
+        void ChangeAutoSave();
+
+        bool IsAutoSave();
     private:
         std::string sourcePath;
         std::string backupPath;
         std::string PWD;
         std::string configPath;
         std::string savedataPath;
+        bool autoSave;
         std::function<bool(std::vector<std::string>, std::vector<std::string>)> cmpFunc;
 };

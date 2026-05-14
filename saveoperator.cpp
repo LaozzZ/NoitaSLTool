@@ -11,19 +11,13 @@ SaveOperator::SaveOperator()
     savedataPath = PWD + SAVEDATA_PATH;
     sourcePath = FileOperator::ReadIni(configPath, "Config", "SourcePath");
     backupPath = FileOperator::ReadIni(configPath, "Config", "SavePath");
+    autoSave = (FileOperator::ReadIni(configPath, "Config", "AutoSave") == "1");
     cmpFunc = (FileOperator::ReadIni(configPath, "Config", "CmpFunc") == "ByTime") ? 
               std::bind(&SaveOperator::CmpByTime, this, std::placeholders::_1, std::placeholders::_2) : 
               std::bind(&SaveOperator::CmpByNum, this, std::placeholders::_1, std::placeholders::_2);
 
-    // std::cout << "===测试信息===" << '\n';
-    // std::cout << "SourcePath = " << sourcePath << '\n';
-    // std::cout << "SavePath = " << backupPath << '\n';
-    // std::cout << "PWD = " << PWD << '\n';
-    // std::cout << "configPath = " << configPath << '\n';
-    // std::cout << "savedataPath = " << savedataPath << '\n';
 }
 
-//待办::Del函数需要加上skip条件( < 0),和删除自动保存的功能
 
 void SaveOperator::Save()
 {   
@@ -79,6 +73,41 @@ void SaveOperator::QuickSave()
         FileOperator::WriteIni(savedataPath, saveNum, "SaveName", saveName);
         FileOperator::WriteIni(savedataPath, saveNum, "SaveTime", getTimeSecond());
     }
+}
+
+void SaveOperator::AutoSave(bool& isMonitor)
+{
+    bool running = false;
+    while(!running)
+    {
+        if(!autoSave)
+            break;
+        if(IsProcRunning(L"noita.exe"))
+        {
+            running = true;
+            std::cout << BLUE << "监测到Noita启动" << "\n\n" << RESET;
+        }
+        Sleep(1000);
+    }
+    while(running)
+    {
+        if(!autoSave)
+            break;
+        if(!IsProcRunning(L"noita.exe"))
+        {
+            running = false;
+            std::cout << BLUE << "监测到Noita退出" << '\n' << RESET;
+            FileOperator::ClearFolder(backupPath + "\\Default");
+            fs::copy(sourcePath, backupPath + "\\Default",
+            fs::copy_options::recursive | 
+            fs::copy_options::overwrite_existing);
+            FileOperator::WriteIni(savedataPath, "Default", "SaveName", "AutoSave");
+            FileOperator::WriteIni(savedataPath, "Default", "SaveTime", getTimeSecond());
+            std::cout << BLUE << "自动保存完成" << "\n\n" << RESET;
+        }
+        Sleep(1000);
+    }
+    isMonitor = false;
 }
 
 void SaveOperator::Load()
@@ -269,6 +298,7 @@ void SaveOperator::PrintConfig()
     std::cout << "Noita存档路径:" << BLUE << sourcePath << '\n' << RESET;
     std::cout << "存档保存路径:" << BLUE << backupPath << '\n' << RESET;
     std::cout << "当前排序方式:" << BLUE << (cmpFunc.target_type() == typeid(&SaveOperator::CmpByTime) ? "ByTime" : "ByNum") << '\n' << RESET;
+    std::cout << "自动保存功能:" << BLUE << (autoSave ? "已启用" : "未启用") << '\n' << RESET;
 }
 
 void SaveOperator::InitPath()
@@ -368,4 +398,31 @@ void SaveOperator::ChangeSourcePath()
     FileOperator::WriteIni(configPath, "Config", "SourcePath", key);
     sourcePath = key;
     std::cout << BLUE << "已更改Noita存档路径:" << key << '\n' << RESET;
+}
+
+void SaveOperator::ChangeAutoSave()
+{
+    std::string key;
+    std::cout << YELLOW << "自动保存功能修改中,输入skip可跳过" << '\n' << RESET;
+    std::cout << YELLOW << "当前自动保存状态:" << (autoSave ? "已启用" : "未启用") << '\n' << RESET;
+    std::cout << YELLOW << "输入新的自动保存状态(1:启用, 0:禁用):" << RESET;
+    std::cin >> key;
+    while(key != "skip" && key != "0" && key != "1")
+    {
+        std::cout << RED << "无效输入,请输入有效的选项:" << RESET;
+        std::cin >> key;
+    }
+    if(key == "skip")
+    {
+        std::cout << BLUE << "已跳过自动保存功能修改" << '\n' << RESET;
+        return;
+    }
+    autoSave = (key == "1");
+    FileOperator::WriteIni(configPath, "Config", "AutoSave", autoSave ? "1" : "0");
+    std::cout << BLUE << "已更改自动保存状态:" << (autoSave ? "已启用" : "未启用") << '\n' << RESET;
+}
+
+bool SaveOperator::IsAutoSave()
+{
+    return autoSave;
 }

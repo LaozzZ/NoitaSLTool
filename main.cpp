@@ -8,10 +8,48 @@
 #include <map>
 #include <cctype>
 #include <algorithm>
+#include <thread>
 
 void cmd_exit()
 {
     exit(0);
+}
+
+std::map<std::string,std::function<void()>> command_map;
+SaveOperator SOT;
+bool isMonitor = false;
+
+void Input()
+{
+    while(1)
+    {
+        std::string command;
+        //std::cout << YELLOW << "\n请输入指令:" << RESET;
+        std::cout << '\n';
+        std::cin >> command;
+        std::transform(command.begin(), command.end(), command.begin(), [](unsigned char c) 
+        {
+            return static_cast<char>(std::tolower(c));
+        });
+        if(command_map.find(command) != command_map.end())
+            command_map[command]();
+        else
+            std::cout << RED << "未找到指令:" << command << RESET << '\n';
+    }
+}
+
+void Monitor()
+{
+    while(1)
+    {
+        if(SOT.IsAutoSave() && !isMonitor)
+        {   
+            isMonitor = true;
+            std::thread monitor([&]() { SOT.AutoSave(isMonitor); });
+            monitor.detach();
+        }
+        Sleep(500);
+    }
 }
 
 int main()
@@ -19,9 +57,7 @@ int main()
     system("chcp 65001");
     SetConsoleOutputCP(65001);  //设置编码
     printLogo();
-    SaveOperator SOT;
 
-    std::map<std::string,std::function<void()>> command_map;
     command_map["exit"] = cmd_exit;
     command_map["quit"] = cmd_exit;
     command_map["save"] = std::bind(&SaveOperator::Save, &SOT);
@@ -35,20 +71,11 @@ int main()
     command_map["changecmpfunc"] = std::bind(&SaveOperator::ChangeCmpFunc, &SOT);
     command_map["changesavepath"] = std::bind(&SaveOperator::ChangeSavePath, &SOT);
     command_map["changesourcepath"] = std::bind(&SaveOperator::ChangeSourcePath, &SOT);
+    command_map["changeautosave"] = std::bind(&SaveOperator::ChangeAutoSave, &SOT);
     SOT.CheckPaths();
-    
-    while(1)
-    {
-        std::string command;
-        std::cout << YELLOW << "\n请输入指令:" << RESET;
-        std::cin >> command;
-        std::transform(command.begin(), command.end(), command.begin(), [](unsigned char c) 
-        {
-            return static_cast<char>(std::tolower(c));
-        });
-        if(command_map.find(command) != command_map.end())
-            command_map[command]();
-        else
-            std::cout << RED << "未找到指令:" << command << RESET << '\n';
-    }
+    if(SOT.IsAutoSave())
+        std::cout << BLUE << "自动保存已启用" << RESET << '\n';
+    std::thread MonitorThread(Monitor);
+    MonitorThread.detach();
+    Input();
 }
