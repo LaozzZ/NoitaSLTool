@@ -44,8 +44,10 @@
 * **更改排序方式：** 指令`changecmpfunc` 或 `cmp`
   * 修改存档信息打印时的排序方式（按编号从小到大 / 按时间从近到远）。
 * **更改存档保存路径：** 指令`changesavepath` 或 `savepath`
+  * 此操作会将原路径中的存档文件转移到更改后的路径中，并清空原路径的文件夹。
 * **更改Noita存档路径：** 指令`changesourcepath` 或 `sourcepath`
 * **更改自动存档状态：** 指令`changeautosave` 或 `autosave`
+  * 可以随时更改，即使是在游戏中。
 ## 安装与运行
 * 确保你的操作系统是Windows。
 * 下载[Release](https://github.com/LaozzZ/NoitaSLTool/releases/tag/1.0)中的压缩包**static-NoitaSLTool.rar**并解压。Release中的程序使用静态链接编译，即使没有配置C++环境变量也可以使用。
