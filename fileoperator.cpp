@@ -44,8 +44,6 @@ void FileOperator::RemoveAll(std::string dir)
         std::cout << RED << "删除失败:" << RESET << ec.message() << '\n';
         std::cout << RED << "错误码:" << RESET << ec.value() << '\n';
     }
-    else   
-        std::cout << BLUE << "已执行删除,路径:" << dir << RESET << '\n';
 }
 
 void FileOperator::ClearFolder(std::string dir)

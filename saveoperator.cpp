@@ -44,7 +44,6 @@ void SaveOperator::Save()
     FileOperator::Save(sourcePath, pwd);
     FileOperator::WriteIni(savedataPath, saveNum, "SaveName", saveName);
     FileOperator::WriteIni(savedataPath, saveNum, "SaveTime", getTimeSecond());
-    std::cout << BLUE << "存档名:" << saveName << '\n' <<  RESET;
 }
 
 void SaveOperator::QuickSave()
