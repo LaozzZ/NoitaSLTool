@@ -100,7 +100,10 @@ void SaveOperator::AutoSave(bool& isMonitor)
         {
             running = false;
             std::cout << BLUE << "监测到Noita退出" << '\n' << RESET;
-            FileOperator::ClearFolder(backupPath + "\\Default");
+            if(!fs::exists(backupPath + "\\Default"))
+                fs::create_directory(backupPath + "\\Default");
+            else
+                FileOperator::ClearFolder(backupPath + "\\Default");
             fs::copy(sourcePath, backupPath + "\\Default",
             fs::copy_options::recursive | 
             fs::copy_options::overwrite_existing);
