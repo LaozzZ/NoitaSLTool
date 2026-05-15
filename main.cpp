@@ -30,7 +30,7 @@ void Help()
     std::cout << "[saveinfo / info] 打印所有存档信息,其中编号为Default的存档默认打印,为自动保存存档" << '\n';
     std::cout << "[config] 打印配置和状态信息" << '\n';
     std::cout << "[changecmpfunc / cmp] 更改存档排序方式(按编号 / 按时间)" << '\n';
-    std::cout << "[changesavepath / savepath] 修改存档保存路径" << '\n';
+    std::cout << "[changesavepath / savepath] 修改存档保存路径,会将存档转移至修改后的路径处" << '\n';
     std::cout << "[changesourcepath / sourcepath] 修改Noita存档路径" << '\n';
     std::cout << "[changeautosave / autosave] 修改自动保存状态" << '\n';
 }
