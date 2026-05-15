@@ -364,6 +364,8 @@ void SaveOperator::CheckPaths()
         InitPath();
         return;
     }
+    else if(!fs::exists(backupPath + "//Default"))
+        fs::create_directory(backupPath + "\\Default");
     std::cout << GREEN << "路径检查通过" << '\n' << RESET;
 }
 
