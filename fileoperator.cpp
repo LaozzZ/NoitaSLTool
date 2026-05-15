@@ -63,7 +63,7 @@ bool FileOperator::Save(std::string source, std::string backup)
     else if(!isDirEmpty(backup))
     {   
         char key;
-        std::cout << YELLOW << "位置已被占用 是否覆盖? (y/n)";
+        std::cout << YELLOW << "位置已被占用 是否覆盖? (y/n)" << RESET;
         std::cin >> key;
         if(key == 'y' || key == 'Y')
             RemoveAll(backup);
@@ -71,7 +71,7 @@ bool FileOperator::Save(std::string source, std::string backup)
             return 0;
         else
         {
-            std::cout << "无效输入" << '\n';
+            std::cout << RED << "无效输入,本次操作已取消" << '\n' << RESET;
             return 0;
         }
     }

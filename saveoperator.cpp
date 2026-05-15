@@ -29,7 +29,7 @@ void SaveOperator::Save()
     {
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << RED << "输入不合法,请输入1 ~ n的整数,本次操作取消" << '\n' << RESET;
+        std::cout << RED << "输入不合法,请输入1 ~ n的整数,本次操作已取消" << '\n' << RESET;
         return; 
     }
     else if(dir <= 0)
@@ -44,6 +44,7 @@ void SaveOperator::Save()
     FileOperator::Save(sourcePath, pwd);
     FileOperator::WriteIni(savedataPath, saveNum, "SaveName", saveName);
     FileOperator::WriteIni(savedataPath, saveNum, "SaveTime", getTimeSecond());
+    std::cout << BLUE << "存档名:" << saveName << '\n' <<  RESET;
 }
 
 void SaveOperator::QuickSave()
@@ -61,6 +62,7 @@ void SaveOperator::QuickSave()
             FileOperator::Save(sourcePath, pwd);
             FileOperator::WriteIni(savedataPath, saveNum, "SaveName", saveName);
             FileOperator::WriteIni(savedataPath, saveNum, "SaveTime", getTimeSecond());
+            std::cout << BLUE << "存档名:" << saveName << '\n' <<  RESET;
             break;
         }
     }
@@ -72,6 +74,7 @@ void SaveOperator::QuickSave()
         FileOperator::Save(sourcePath, pwd);
         FileOperator::WriteIni(savedataPath, saveNum, "SaveName", saveName);
         FileOperator::WriteIni(savedataPath, saveNum, "SaveTime", getTimeSecond());
+        std::cout << BLUE << "存档名:" << saveName << '\n' <<  RESET;
     }
 }
 
@@ -103,7 +106,8 @@ void SaveOperator::AutoSave(bool& isMonitor)
             fs::copy_options::overwrite_existing);
             FileOperator::WriteIni(savedataPath, "Default", "SaveName", "AutoSave");
             FileOperator::WriteIni(savedataPath, "Default", "SaveTime", getTimeSecond());
-            std::cout << BLUE << "自动保存完成" << "\n\n" << RESET;
+            std::cout << BLUE << "自动保存完成" << '\n' << RESET;
+            std::cout << BLUE << "===========" << "\n\n" << RESET;
         }
         Sleep(1000);
     }
@@ -119,7 +123,7 @@ void SaveOperator::Load()
     {
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << RED << "输入不合法,请输入0 ~ n的整数,本次操作取消" << '\n' << RESET;
+        std::cout << RED << "输入不合法,请输入0 ~ n的整数,本次操作已取消" << '\n' << RESET;
         return; 
     }
     else if(source < 0)
@@ -290,6 +294,7 @@ void SaveOperator::PrintSaveInformations()
         std::cout << "存档时间:" << BLUE << info[2] << '\n' << RESET;
     }
     std::cout << BLUE << "排序方式:" << FileOperator::ReadIni(configPath, "Config", "CmpFunc") << '\n' << RESET;
+    std::cout << BLUE << "自动保存:" << (autoSave ? "已启用" : "未启用") << '\n' << RESET;
 }
 
 void SaveOperator::PrintConfig()
