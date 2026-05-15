@@ -191,6 +191,14 @@ void SaveOperator::Del()
         std::cout << RED << "未找到存档:" << dir << RESET << '\n';
         return;
     }
+    if(dir == 0)
+    {
+        FileOperator::ClearFolder(pwd);
+        FileOperator::WriteIni(savedataPath, saveNum, "SaveName", "");
+        FileOperator::WriteIni(savedataPath, saveNum, "SaveTime", "");
+        std::cout << BLUE << "删除成功!存档编号:" << saveNum << " 存档名:" << saveName << RESET << '\n';
+        return;
+    }
     FileOperator::RemoveAll(pwd);
     WritePrivateProfileStringA(saveNum.c_str(), NULL, NULL, savedataPath.c_str());
     std::cout << BLUE << "删除成功!存档编号:" << saveNum << " 存档名:" << saveName << RESET << '\n';
